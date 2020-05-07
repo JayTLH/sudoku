@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './App.scss'
+import github from './assets/github.png'
 
 const blank = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -199,6 +200,12 @@ export default class App extends Component {
             <button className="btns__btn" onClick={this.click} value="extreme">EXTREME</button>
           </div>
           <button className="btns__btn" onClick={this.click} value="solve">SOLVE</button>
+        </div>
+
+        <div className="links">
+          <a className="links__link" href="https://github.com/JayTLH/sudoku" target="_blank" rel="noopener noreferrer">
+            <img className="links__icon" src={github} alt="github" />
+          </a>
         </div>
       </div>
     )

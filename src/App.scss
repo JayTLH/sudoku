@@ -1,39 +1,106 @@
 .app {
-  width: 100vw;
-  height: 100vh;
-  background: #3f3f3f;
   color: #cacaca;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+
+  &__background {
+    background: #3f3f3f;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: -2;
+  }
+
+  &__title {
+    height: 40px;
+    margin: 20px 0;
+  }
+}
+
+.grid {
+  background: none;
 
   &__row {
     display: flex;
   }
 
   &__num {
-    background: grey;
+    background: #444444;
+    color: #cacaca;
     text-align: center;
-    width: 16px;
-    height: 16px;
+    font-size: 20px;
+    font-weight: bold;
+    width: 30px;
+    height: 30px;
     border: none;
-    margin: 1px 7px;
+    margin: 2px;
+  }
+}
+
+.line {
+  width: 306px;
+  height: 306px;
+  position: absolute;
+  top: 80px;
+  z-index: -1;
+
+  &__row {
+    background: #313131;
+    width: 100%;
+    height: 4px;
+    position: absolute;
+
+    &--one {
+      top: 100px;
+    }
+    &--two {
+      bottom: 100px;
+    }
+  }
+
+  &__col {
+    background: #313131;
+    width: 4px;
+    height: 100%;
+    position: absolute;
+
+    &--one {
+      left: 100px;
+    }
+    &--two {
+      right: 100px;
+    }
+  }
+}
+
+.btns {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__cont {
+    display: flex;
   }
 
   &__btn {
     font-weight: bold;
     background: #313131;
     color: #cacaca;
+    width: fit-content;
     padding: 8px 10px;
     border: none;
     border-radius: 10px;
-    margin: 20px 0 0 0;
+    margin: 20px 4px 0 4px;
     cursor: pointer;
     transition: transform 0.1s;
 
     &:hover {
       transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(1);
     }
   }
 }
@@ -46,6 +113,6 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }

@@ -101,7 +101,7 @@ export default class App extends Component {
     }
     this.solve(grid)
 
-    // easy 45 cells, medium 50, hard 60, extreme 65
+    // easy 42 missing cells, medium 48, hard 54, extreme 60
     const cells = []
     while (cells.length !== difficulty) {
       const ran_y = Math.floor(Math.random() * 9)
@@ -111,35 +111,36 @@ export default class App extends Component {
         cells.push([ran_y, ran_x])
       }
     }
+    console.log(cells.sort())
 
     cells.forEach(cell => {
-      grid[cell[0]][cell[1]] = ""
+      grid[cell[0]][cell[1]] = 0
     })
   }
 
   click = (e) => {
+    let clone = blank.slice()
     switch (e.target.value) {
       case "solve":
-        this.solve(this.state.grid)
-        this.setState({ grid: this.state.grid })
+        clone = this.state.grid.slice()
+        this.solve(clone)
+        this.setState({ grid: clone })
         break
       case "easy":
-        this.setState({ grid: blank }, () => {
-          this.play(this.state.grid, 45)
-          this.setState({ grid: this.state.grid })
-        })
+        this.play(clone, 42)
+        this.setState({ grid: clone })
         break
       case "medium":
-        this.play(this.state.grid, 50)
-        this.setState({ grid: this.state.grid })
+        this.play(clone, 48)
+        this.setState({ grid: clone })
         break
       case "hard":
-        this.play(this.state.grid, 55)
-        this.setState({ grid: this.state.grid })
+        this.play(clone, 54)
+        this.setState({ grid: clone })
         break
       case "extreme":
-        this.play(this.state.grid, 60)
-        this.setState({ grid: this.state.grid })
+        this.play(clone, 60)
+        this.setState({ grid: clone })
         break
       default:
         console.log("something was clicked")
@@ -158,32 +159,47 @@ export default class App extends Component {
   render() {
     return (
       <div className="app">
-        {this.state.grid.map((row, ri) => {
-          return (
-            <div key={`row${ri}`} className="app__row">
-              {row.map((num, ci) => {
-                return (
-                  <input
-                    key={`${num}${ci}`}
-                    className="app__num"
-                    id={`row_${ri}_col_${ci}`}
-                    name={`row_${ri}_col_${ci}`}
-                    type="number"
-                    value={this.state.grid[ri][ci] === 0 ? "" : this.state.grid[ri][ci]}
-                    onChange={this.change}
-                  />
-                )
-              })}
-            </div>
-          )
-        })}
-        <div className="app__play-btns">
-          <button className="app__btn" onClick={this.click} value="easy">EASY</button>
-          <button className="app__btn" onClick={this.click} value="medium">MEDIUM</button>
-          <button className="app__btn" onClick={this.click} value="hard">HARD</button>
-          <button className="app__btn" onClick={this.click} value="extreme">EXTREME</button>
+        <div className="app__background" />
+        <h1 className="app__title">SUDOKU</h1>
+
+        <div className="line">
+          <div className="line__row line__row--one" />
+          <div className="line__row line__row--two" />
+          <div className="line__col line__col--one" />
+          <div className="line__col line__col--two" />
         </div>
-        <button className="app__btn" onClick={this.click} value="solve">SOLVE</button>
+
+        <div className="grid">
+          {this.state.grid.map((row, ri) => {
+            return (
+              <div key={`row${ri}`} className="grid__row">
+                {row.map((num, ci) => {
+                  return (
+                    <input
+                      key={`${num}${ci}`}
+                      className="grid__num"
+                      id={`row_${ri}_col_${ci}`}
+                      name={`row_${ri}_col_${ci}`}
+                      type="number"
+                      value={this.state.grid[ri][ci] === 0 ? "" : this.state.grid[ri][ci]}
+                      onChange={this.change}
+                    />
+                  )
+                })}
+              </div>
+            )
+          })}
+        </div>
+
+        <div className="btns">
+          <div className="btns__cont">
+            <button className="btns__btn" onClick={this.click} value="easy">EASY</button>
+            <button className="btns__btn" onClick={this.click} value="medium">MEDIUM</button>
+            <button className="btns__btn" onClick={this.click} value="hard">HARD</button>
+            <button className="btns__btn" onClick={this.click} value="extreme">EXTREME</button>
+          </div>
+          <button className="btns__btn" onClick={this.click} value="solve">SOLVE</button>
+        </div>
       </div>
     )
   }

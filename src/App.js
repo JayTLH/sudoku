@@ -16,50 +16,35 @@ const blank = [
 
 export default class App extends Component {
   state = {
-    grid: blank
+    grid: blank,
+    check: false
   }
 
-  // returns the position of any zeroes
-  empty = (grid) => {
+  find_zero = (grid) => {
     for (let row = 0; row < 9; row++) {
       for (let col = 0; col < 9; col++) {
-        if (grid[row][col] === 0) {
-          return [row, col]
-        }
+        if (grid[row][col] === 0) { return { row: row, col: col } }
       }
     }
-
-    return false
   }
 
-  // checking if number in position is valid
-  valid = (grid, num, pos) => {
-    const row = pos[0]
-    const col = pos[1]
-
+  check_num = (grid, position, num) => {
     // check row
-    for (let i = 0; i < 9; i++) {
-      if (grid[row][i] === num && col !== i) {
-        return false
-      }
+    for (let col = 0; col < 9; col++) {
+      if (grid[position.row][col] === num && position.col !== col) { return false }
     }
 
     // check column
-    for (let i = 0; i < 9; i++) {
-      if (grid[i][col] === num && row !== i) {
-        return false
-      }
+    for (let row = 0; row < 9; row++) {
+      if (grid[row][position.col] === num && position.row !== row) { return false }
     }
 
-    // check box
-    // defines box position (top left index)
-    const box_y = Math.floor(row / 3) * 3
-    const box_x = Math.floor(col / 3) * 3
-    for (let y = box_y; y < box_y + 3; y++) {
-      for (let x = box_x; x < box_x + 3; x++) {
-        if (grid[y][x] === num && [y, x] !== pos) {
-          return false
-        }
+    // check box, define box position at top left index
+    const box_row = ~~(position.row / 3) * 3
+    const box_col = ~~(position.col / 3) * 3
+    for (let row = box_row; row < box_row + 3; row++) {
+      for (let col = box_col; col < box_col + 3; col++) {
+        if (grid[row][col] === num && `${row}${col}` !== `${position.row}${position.col}`) { return false }
       }
     }
 
@@ -67,25 +52,14 @@ export default class App extends Component {
   }
 
   solve = (grid) => {
-    const find = this.empty(grid)
-    let row
-    let col
-    if (!find) {
-      return true
-    } else {
-      row = find[0]
-      col = find[1]
-    }
+    const position = this.find_zero(grid)
+    if (!position) { return true }
 
-    for (let i = 1; i < 10; i++) {
-      if (this.valid(grid, i, [row, col])) {
-        grid[row][col] = i
-        // checks to see if the new grid works
-        if (this.solve(grid)) {
-          return true
-        }
-        // if not, revert back to a version that does work
-        grid[row][col] = 0
+    for (let num = 1; num < 10; num++) {
+      if (this.check_num(grid, position, num)) {
+        grid[position.row][position.col] = num
+        if (this.solve(grid)) { return true } // checks to see if the new grid works
+        grid[position.row][position.col] = 0 // if not, revert back to a version that does work
       }
     }
 
@@ -112,7 +86,6 @@ export default class App extends Component {
         cells.push([ran_y, ran_x])
       }
     }
-    console.log(cells.sort())
 
     cells.forEach(cell => {
       grid[cell[0]][cell[1]] = 0
@@ -120,6 +93,11 @@ export default class App extends Component {
   }
 
   click = (e) => {
+    // popup confimation modal below
+    // if (this.empty(this.state.grid)) {
+
+    // }
+
     let clone = blank.slice()
     switch (e.target.value) {
       case "solve":

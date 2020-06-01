@@ -14,9 +14,17 @@ const blank = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
+const slicer = (blank) => {
+  const clone = []
+  blank.forEach(arr => {
+    clone.push(arr.slice())
+  })
+  return clone
+}
+
 export default class App extends Component {
   state = {
-    grid: blank,
+    grid: slicer(blank),
     check: false
   }
 
@@ -97,11 +105,10 @@ export default class App extends Component {
     // if (this.empty(this.state.grid)) {
 
     // }
-
-    let clone = blank.slice()
+    let clone = slicer(blank)
     switch (e.target.value) {
       case "solve":
-        clone = this.state.grid.slice()
+        clone = this.state.grid
         this.solve(clone)
         this.setState({ grid: clone })
         break
@@ -130,7 +137,7 @@ export default class App extends Component {
     const pos = e.target.id.split("_")
     const row = pos[1]
     const col = pos[3]
-    const clone = this.state.grid.slice()
+    const clone = this.state.grid
     clone[row][col] = Number(e.target.value)
     this.setState({ grid: clone })
   }
